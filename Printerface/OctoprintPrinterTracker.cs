@@ -63,14 +63,14 @@ namespace OctoprintClient
         /// <summary>
         /// Action for Eventhandling the Websocket Temperature info
         /// </summary>
-        public event Action<List<OctoprintHistoricTemperatureState>> TempHandlers;
+        public event Action<OctoprintHistoricTemperatureState> TempHandlers;
         public bool TempsListens()
         {
             return TempHandlers!=null;
         }
-        public void CallTemp(List<OctoprintHistoricTemperatureState> LHT)
+        public void CallTemp(OctoprintHistoricTemperatureState HT)
         {
-            TempHandlers.Invoke(LHT);
+            TempHandlers.Invoke(HT);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace OctoprintClient
         public OctoprintFullPrinterState GetFullPrinterState()
         {
             TimeSpan passed = DateTime.Now.Subtract(lastupdated);
-            if (passed.Milliseconds > BestBeforeMilisecs)
+            if (passed.Milliseconds > BestBeforeMilisecs && currentstate != null)
             {
                 return currentstate;
             }

@@ -333,28 +333,11 @@ namespace OctoprintClient
                         }
 
                         JToken temps = current.Value<JToken>("temps");
-                        if(temps!=null && Printers.TempsListens())
+                        if(temps!=null && Printers.TempsListens() && temps.HasValues)
                         {
-                            List<OctoprintHistoricTemperatureState> tempList = new List<OctoprintHistoricTemperatureState>();
-                            for (int i = 0; i < 256; i++)
-                            {
-                                JToken tooltemp = offsets.Value<JToken>("tool"+i);
-                                if (tooltemp != null)
-                                {
-
-                                    tempList.Add(new OctoprintHistoricTemperatureState(tooltemp));
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                            JToken tempBed = offsets.Value<JToken>("bed");
-                            if (tempBed != null)
-                            {
-                                tempList.Add(new OctoprintHistoricTemperatureState(tempBed));
-                            }
-                            Printers.CallTemp(tempList);
+                            temps = temps.Value<JToken>(0);
+                            Printers.CallTemp(new OctoprintHistoricTemperatureState(temps));
+                            
                         }
 
                     }
